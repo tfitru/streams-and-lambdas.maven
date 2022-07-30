@@ -5,7 +5,9 @@ import com.zipcodewilmington.streams.tools.StringUtils;
 
 import java.util.Date;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 /**
@@ -21,6 +23,7 @@ public final class PersonFactory {
     /**
      * @return a new instance of a person with fields of random values
      */
+    Person randomPerson;
     public Person createRandomPerson() {
         String name = StringUtils.capitalizeFirstChar(RandomUtils.createString('a', 'e', 3));
         String[] aliases = RandomUtils.createStrings('a', 'z', 3, 5);
@@ -28,7 +31,7 @@ public final class PersonFactory {
         long personalId = System.nanoTime();
         Date birthDate = RandomUtils.createDate(1950, 2010);
 
-        Person randomPerson = new Person(name, isMale, personalId, birthDate, aliases);
+        randomPerson = new Person(name, isMale, personalId, birthDate, aliases);
         return randomPerson;
     }
 
@@ -39,7 +42,7 @@ public final class PersonFactory {
      * @return - ArrayList of Person objects
      */ // TODO
     public List<Person> createPersonList(int listSize) {
-        return null;
+        return IntStream.range(0, listSize).mapToObj(i -> new Person(createRandomPerson().getName(), createRandomPerson().isMale(), createRandomPerson().getPersonalId(), createRandomPerson().getBirthDate(),createRandomPerson().getAliases())).collect(Collectors.toList());
     }
 
 
@@ -48,7 +51,7 @@ public final class PersonFactory {
      * @return - Array of Person objects
      */ // TODO
     public Person[] createPersonArray(int arrayLength) {
-        return null;
+        return IntStream.range(0, arrayLength).mapToObj(i -> new Person(createRandomPerson().getName(), createRandomPerson().isMale(), createRandomPerson().getPersonalId(), createRandomPerson().getBirthDate(),createRandomPerson().getAliases())).toArray(Person[]::new);
     }
 
 
@@ -59,6 +62,7 @@ public final class PersonFactory {
      * @return - Stream representation of collection of Person objects
      */ // TODO
     public Stream<Person> createPersonStream(int streamCount) {
-        return null;
+
+        return Stream.generate(()-> new Person(createRandomPerson().getName(), createRandomPerson().isMale(), createRandomPerson().getPersonalId(), createRandomPerson().getBirthDate(),createRandomPerson().getAliases())).limit(streamCount);
     }
 }
